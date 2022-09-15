@@ -1,0 +1,10 @@
+package com.develcode.avaliacao.usuario.model;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "USUARIO")
+public class Usuario {
+
+}

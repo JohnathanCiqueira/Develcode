@@ -1,0 +1,11 @@
+package com.develcode.avaliacao.usuario.dto;
+
+import java.io.Serializable;
+
+public class UsuarioDTO implements Serializable{
+
+	private static final long serialVersionUID = 1329644544802951773L;
+	
+	
+
+}

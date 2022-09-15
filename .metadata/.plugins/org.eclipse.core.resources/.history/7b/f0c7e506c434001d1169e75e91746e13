@@ -1,0 +1,5 @@
+package com.develcode.avaliacao.usuario.model;
+
+public class Usuario {
+
+}

@@ -1,0 +1,55 @@
+package com.develcode.avaliacao.usuario.service;
+
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.develcode.avaliacao.usuario.dto.UsuarioDTO;
+import com.develcode.avaliacao.usuario.model.Usuario;
+import com.develcode.avaliacao.usuario.repository.UsuarioRepository;
+
+@Service
+public class UsuarioService {
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	public ResponseEntity<List<Usuario>> listarTodosUsuarios() {
+		List<Usuario> listUsuario = usuarioRepository.findAll();
+		return ResponseEntity.ok().body(listUsuario);
+	}
+
+	public ResponseEntity<Usuario> findOne(Long codigo) {
+		Usuario usuario = usuarioRepository.findById(codigo).get();
+		return ResponseEntity.ok().body(usuario);
+	}
+
+	public ResponseEntity<Object> cadastrar(UsuarioDTO usuarioDTO) {
+		try {
+			Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
+			Usuario save = usuarioRepository.save(usuario);
+			return ResponseEntity.ok().body(save);
+		} catch (Exception e) {
+			String msg = "Falha ao tentar cadastrar o usuário: " + usuarioDTO.getNome();
+			return ResponseEntity.badRequest().body(msg);
+		}
+	}
+
+	public ResponseEntity<Object> update(UsuarioDTO usuarioDTO) {
+		try {
+			Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
+			Usuario save = usuarioRepository.save(usuario);
+			return ResponseEntity.ok().body(save);
+		} catch (Exception e) {
+			String msg = "Falha ao tentar atualizar o usuário: " + usuarioDTO.getNome();
+			return ResponseEntity.badRequest().body(msg);
+		}
+	}
+
+}

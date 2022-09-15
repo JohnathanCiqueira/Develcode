@@ -1,0 +1,5 @@
+package com.develcode.avaliacao.config;
+
+public class SwaggerConfig {
+
+}

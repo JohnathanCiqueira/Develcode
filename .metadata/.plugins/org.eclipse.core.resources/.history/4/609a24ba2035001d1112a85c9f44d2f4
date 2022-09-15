@@ -1,0 +1,91 @@
+package com.develcode.avaliacao.usuario.service;
+
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.develcode.avaliacao.usuario.dto.UsuarioDTO;
+import com.develcode.avaliacao.usuario.model.Usuario;
+import com.develcode.avaliacao.usuario.repository.UsuarioRepository;
+
+@Service
+public class UsuarioService {
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	private ModelMapper modelMapper;
+
+	public ResponseEntity<List<Usuario>> listarTodosUsuarios() {
+		List<Usuario> listUsuario = usuarioRepository.findAll();
+		return ResponseEntity.ok().body(listUsuario);
+	}
+
+	public ResponseEntity<Object> findOne(Long codigo) {
+		if (codigo == null) {
+			String msg = "O código do usuário deve ser informado";
+			return ResponseEntity.badRequest().body(msg);
+		}
+		Usuario usuario = usuarioRepository.findById(codigo).get();
+		return ResponseEntity.ok().body(usuario);
+	}
+
+	public ResponseEntity<Object> cadastrar(UsuarioDTO usuarioDTO, MultipartFile file[]) {
+		try {
+			Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
+			String msg = "Falha ao tentar cadastrar o usuário: " + usuarioDTO.getNome();
+			if (file == null) {
+				return ResponseEntity.badRequest().body(msg);
+			} else {
+				for (MultipartFile multipartFile : file) {
+					usuario.setFoto(multipartFile.getBytes());
+				}
+				
+			}
+
+			Usuario save = usuarioRepository.save(usuario);
+			return ResponseEntity.ok().body(save);
+		} catch (Exception e) {
+			String msg = "Falha ao tentar cadastrar o usuário: " + usuarioDTO.getNome();
+			return ResponseEntity.badRequest().body(msg);
+		}
+	}
+
+	public ResponseEntity<Object> atualizar(UsuarioDTO usuarioDTO, MultipartFile file) {
+		try {
+			Usuario usuario = modelMapper.map(usuarioDTO, Usuario.class);
+			String msg = "Falha ao tentar atualizar o usuário: " + usuarioDTO.getNome();
+			if (file == null) {
+				return ResponseEntity.badRequest().body(msg);
+			} else {
+				usuario.setFoto(file.getBytes());
+			}
+			Usuario save = usuarioRepository.save(usuario);
+			return ResponseEntity.ok().body(save);
+		} catch (Exception e) {
+			String msg = "Falha ao tentar atualizar o usuário: " + usuarioDTO.getNome();
+			return ResponseEntity.badRequest().body(msg);
+		}
+	}
+
+	public ResponseEntity<Object> deletar(Long codigo) {
+		try {
+			if (codigo == null) {
+				String msg = "O código do usuário deve ser informado";
+				return ResponseEntity.badRequest().body(msg);
+			}
+			usuarioRepository.deleteById(codigo);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		} catch (Exception e) {
+			String msg = "Falha ao tentar deletar o usuário: " + codigo;
+			return ResponseEntity.badRequest().body(msg);
+		}
+	}
+
+}

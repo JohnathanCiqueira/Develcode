@@ -1,0 +1,17 @@
+package com.develcode.avaliacao.usuario.dto;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+public class UsuarioDTO implements Serializable{
+
+	private static final long serialVersionUID = 1329644544802951773L;
+	
+	@NotBlank(message = "Preenchimento do campo descricao é obrigatório")
+	private String nome;
+
+	private LocalDateTime dataNascimeto;
+
+	private byte[] foto;
+
+}

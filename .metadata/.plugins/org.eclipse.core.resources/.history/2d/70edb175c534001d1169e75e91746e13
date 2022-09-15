@@ -1,0 +1,7 @@
+package com.develcode.avaliacao.usuario.dto;
+
+import java.io.Serializable;
+
+public class UsuarioDTO implements Serializable{
+
+}
